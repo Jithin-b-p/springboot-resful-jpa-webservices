@@ -1,12 +1,16 @@
 package com.springboot.Service.ServiceImpl;
 
+import com.springboot.Dto.UserDto;
 import com.springboot.Entity.User;
+import com.springboot.Mapper.UserMapper;
 import com.springboot.Repository.UserRepository;
 import com.springboot.Service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -15,23 +19,38 @@ public class userServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
+    public UserDto createUser(UserDto userDto) {
 
-        return userRepository.save(user);
+        //Convert the userDto into user jpa entity.
+        User user = UserMapper.mapToUser(userDto);
+
+        User savedUser = userRepository.save(user);
+
+        //convert the user jpa entity to userDto.
+        UserDto savedUserDto = UserMapper.mapToUserDto(savedUser);
+
+        return savedUserDto;
 
     }
 
     @Override
-    public User getUserById(int id) {
+    public UserDto getUserById(int id) {
 
-        return userRepository.findById(id).get();
+        User user = userRepository.findById(id).get();
+
+        //converting user jpa entity to userDto
+        UserDto userDto = UserMapper.mapToUserDto(user);
+
+        return userDto;
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
 
         List<User> users = userRepository.findAll();
-        return users;
+
+        return users.stream().map(UserMapper::mapToUserDto)
+                .collect(Collectors.toList());
 
     }
 

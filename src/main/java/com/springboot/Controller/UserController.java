@@ -1,5 +1,6 @@
 package com.springboot.Controller;
 
+import com.springboot.Dto.UserDto;
 import com.springboot.Entity.User;
 import com.springboot.Service.UserService;
 import lombok.AllArgsConstructor;
@@ -18,25 +19,26 @@ public class UserController {
 
     //build create user REST API
     @PostMapping("add")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
 
-        User savedUser = userService.createUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        UserDto savedUserDto = userService.createUser(userDto);
+        return new ResponseEntity<>(savedUserDto, HttpStatus.CREATED);
+
     }
 
     //build get user by id REST API
     @GetMapping("getUser-ById/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id){
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") int id){
 
-        User user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserDto userDto = userService.getUserById(id);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     //build getAll user REST API.
     @GetMapping("get-All-Users")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserDto>> getAllUsers(){
 
-        List<User> users = userService.getAllUsers();
+        List<UserDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
